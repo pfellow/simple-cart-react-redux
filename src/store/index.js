@@ -42,6 +42,14 @@ const cartSlice = createSlice({
     toggleCart(state) {
       state.isCartDisplayed = !state.isCartDisplayed;
     },
+    showNotification(state, action) {
+      console.log(action.payload);
+    },
+    replaceCart(state, action) {
+      state.quantity = action.payload.quantity;
+      state.items = action.payload.items || [];
+      state.isCartDisplayed = action.payload.isCartDisplayed;
+    },
   },
 });
 
