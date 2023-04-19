@@ -11,10 +11,10 @@ const cartSlice = createSlice({
   initialState: initialCartState,
   reducers: {
     addToCart(state, action) {
-      const currentItemIndex = state.items.findIndex(
+      const currentItem = state.items.find(
         (item) => item.id === action.payload.id
       );
-      if (currentItemIndex === -1) {
+      if (!currentItem) {
         state.items.push({
           id: action.payload.id,
           title: action.payload.title,
@@ -23,25 +23,20 @@ const cartSlice = createSlice({
           total: action.payload.price * action.payload.quantity,
         });
       } else {
-        state.items[currentItemIndex].quantity += action.payload.quantity;
-        state.items[currentItemIndex].total =
-          state.items[currentItemIndex].quantity * action.payload.price;
+        currentItem.quantity += action.payload.quantity;
+        currentItem.total = currentItem.quantity * action.payload.price;
       }
       state.quantity += action.payload.quantity;
     },
     increase(state, action) {
-      const currentItemIndex = state.items.findIndex(
+      const currentItem = state.items.find(
         (item) => item.id === action.payload.id
       );
-      state.items[currentItemIndex].quantity += action.payload.quantity;
-      state.items[currentItemIndex].total =
-        state.items[currentItemIndex].quantity *
-        state.items[currentItemIndex].price;
+      currentItem.quantity += action.payload.quantity;
+      currentItem.total = currentItem.quantity * currentItem.price;
       state.quantity += action.payload.quantity;
-      if (state.items[currentItemIndex].quantity === 0) {
-        state.items = state.items.filter(
-          (item) => item.id !== state.items[currentItemIndex].id
-        );
+      if (currentItem.quantity === 0) {
+        state.items = state.items.filter((item) => item.id !== currentItem.id);
       }
     },
     toggleCart(state) {
